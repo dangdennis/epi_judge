@@ -1,0 +1,3 @@
+(test
+ (name epi_judge)
+ (libraries epi_judge))
