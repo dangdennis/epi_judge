@@ -1,4 +1,5 @@
 import functools
+import itertools
 import random
 from typing import Iterator, List
 
@@ -11,20 +12,33 @@ from test_framework.test_utils import enable_executor_hook
 
 # Assumption: there are at least k elements in the stream.
 def online_random_sample(stream: Iterator[int], k: int) -> List[int]:
-    sample = []
+    # my version. O(n) time, O(n) space
+    # sample = []
     
-    for i in range(k):
-        sample.append(next(stream))
+    # for i in range(k):
+    #     sample.append(next(stream))
+    
+    # total_count = k
+    
+    # for i in stream:
+    #     total_count += 1
+    #     r = random.randint(0, total_count - 1)
+        
+    #     if r <= k-1:
+    #         sample[r] = i
+    
+    # return sample
+    
+    # official version. ~33% faster b/c appending and randint are slower than their islice and randrange equivalent
+    sample = list(itertools.islice(stream, k))
     
     total_count = k
-    
     for i in stream:
         total_count += 1
-        r = random.randint(0, total_count - 1)
-        
-        if r <= k-1:
+        r = random.randrange(total_count)
+        if r < k:
             sample[r] = i
-    
+            
     return sample
 
 
